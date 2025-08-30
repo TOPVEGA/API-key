@@ -1,0 +1,599 @@
+{
+  "api": {
+    "name": "Fallen API",
+    "version": "3.0",
+    "base_url": "https://tgmusic.fallenapi.fun",
+    "endpoints": [
+      {
+        "path": "/search",
+        "method": "GET",
+        "description": "Search for tracks across supported platforms (Spotify)",
+        "params": {
+          "query": {
+            "type": "string",
+            "required": true,
+            "example": "mood",
+            "description": "Search keyword (track name, artist, etc.)"
+          },
+          "limit": {
+            "type": "integer",
+            "required": false,
+            "default": 5,
+            "example": 2,
+            "description": "Max number of results to return"
+          },
+          "p": {
+            "type": "string",
+            "required": false,
+            "default": "spotify",
+            "example": "spotify",
+            "description": "Platform to search on"
+          }
+        },
+        "response": {
+          "success": {
+            "status_code": 200,
+            "example": {
+              "results": [
+                {
+                  "name": "Mood - Lofi",
+                  "artist": "Yagih Mael",
+                  "id": "6v8mSl4GZXok3Ebe9x4Jmr",
+                  "year": "2021",
+                  "cover": "https://i.scdn.co/image/ab67616d0000b273f435c670eebf670491209a0e",
+                  "duration": 162,
+                  "url": "https://open.spotify.com/track/6v8mSl4GZXok3Ebe9x4Jmr",
+                  "platform": "spotify"
+                }
+              ]
+            }
+          },
+          "errors": {
+            "400": "Missing required parameter 'query'.",
+            "404": "No results found.",
+            "500": "Internal server error while searching."
+          }
+        }
+      },
+      {
+        "path": "/track",
+        "method": "GET",
+        "description": "Fetch detailed metadata (with download link) for a given track URL (YouTube, Spotify, Apple Music, SoundCloud, etc.)",
+        "params": {
+          "url": {
+            "type": "string",
+            "required": true,
+            "example": "https://youtu.be/2gXdWrxhGbA?si=86th7aUk9vNlVrSR",
+            "description": "The track URL from YouTube/Spotify/other supported platforms"
+          }
+        },
+        "response": {
+          "success": {
+            "status_code": 200,
+            "example": {
+              "cdnurl": "https://cdn......mp4",
+              "key": "",
+              "name": "Black Clover : Spade Arc - Final Arc — Opening",
+              "artist": "UmGab",
+              "tc": "2gXdWrxhGbA",
+              "cover": "https://i.ytimg.com/vi/2gXdWrxhGbA/hqdefault.jpg",
+              "album": "UmGab",
+              "year": 2025,
+              "duration": 4740,
+              "lyrics": "",
+              "url": "https://www.youtube.com/watch?v=2gXdWrxhGbA",
+              "platform": "youtube"
+            }
+          },
+          "errors": {
+            "400": "Missing required parameter 'url'.",
+            "404": "Track not found or unsupported URL.",
+            "500": "Internal server error."
+          }
+        }
+      },
+      {
+        "path": "/get_url",
+        "method": "GET",
+        "description": "Resolve a direct track URL into its metadata (shortcut for platforms like Spotify/YouTube).",
+        "params": {
+          "url": {
+            "type": "string",
+            "required": true,
+            "example": "https://open.spotify.com/track/6v8mSl4GZXok3Ebe9x4Jmr",
+            "description": "The direct track URL to resolve"
+          }
+        },
+        "response": {
+          "success": {
+            "status_code": 200,
+            "example": {
+              "results": [
+                {
+                  "name": "Mood - Lofi",
+                  "artist": "Yagih Mael",
+                  "id": "6v8mSl4GZXok3Ebe9x4Jmr",
+                  "year": "2021",
+                  "cover": "https://i.scdn.co/image/ab67616d0000b273f435c670eebf670491209a0e",
+                  "duration": 162,
+                  "url": "https://open.spotify.com/track/6v8mSl4GZXok3Ebe9x4Jmr",
+                  "platform": "spotify"
+                }
+              ]
+            }
+          },
+          "errors": {
+            "400": "Missing required parameter 'url'.",
+            "404": "Invalid or unsupported track URL.",
+            "500": "Internal server error."
+          }
+        }
+      },
+      {
+        "path": "/snap",
+        "method": "GET",
+        "description": "Fetch downloadable media (videos/images) from Instagram, TikTok, Twitter, Twitch, Reddit, Threads, Facebook, Pinterest, etc.",
+        "params": {
+          "url": {
+            "type": "string",
+            "required": true,
+            "example": "https://www.instagram.com/reel/DLMmFfpxHvR/?hl=en",
+            "description": "URL of the media to fetch"
+          }
+        },
+        "response": {
+          "success": {
+            "status_code": 200,
+            "example": {
+              "video": [
+                {
+                  "video": "https://scontent-lga3-2.cdninstagram.com/o1/v/t2/...mp4",
+                  "thumbnail": "https://scontent-lga3-3.cdninstagram.com/...jpg"
+                }
+              ]
+            }
+          },
+          "errors": {
+            "400": "Missing required parameter 'url'.",
+            "404": "Media not found or URL unsupported.",
+            "500": "Internal server error."
+          }
+        }
+      },
+      {
+        "path": "/links",
+        "method": "GET",
+        "description": "Retrieve all available platform links for a given track (Songwhip-like feature).",
+        "params": {
+          "url": {
+            "type": "string",
+            "required": true,
+            "example": "https://www.youtube.com/watch?v=1wq47tabJh0",
+            "description": "The original track URL (YouTube/Spotify/etc.)"
+          }
+        },
+        "response": {
+          "success": {
+            "status_code": 200,
+            "example": [
+              "https://music.youtube.com/watch?v=1wq47tabJh0",
+              "https://geo.music.apple.com/sg/album/_/1674035499?i=1674035500&mt=1&app=music&ls=1",
+              "https://open.spotify.com/track/6v8mSl4GZXok3Ebe9x4Jmr",
+              "https://www.pandora.com/TR:44840062",
+              "https://www.deezer.com/track/1916604657",
+              "https://soundcloud.com/yagihmael/mood-lofi-1",
+              "https://music.amazon.com/albums/B0BVG4XHSY?trackAsin=B0BVGBN2M4",
+              "https://listen.tidal.com/track/276090838",
+              "https://play.napster.com/track/tra.671577117",
+              "https://amazon.com/dp/B0BVGBN2M4"
+            ]
+          },
+          "errors": {
+            "400": "Missing required parameter 'url'.",
+            "404": "Links not found for given track.",
+            "500": "Internal server error."
+          }
+        }
+      },
+      {
+        "path": "/instagram",
+        "method": "GET",
+        "description": "Fetch media, metadata, and comments from an Instagram reel/post.",
+        "params": {
+          "url": {
+            "type": "string",
+            "required": true,
+            "example": "https://www.instagram.com/reel/DHDzIubgNzz",
+            "description": "Direct link to the Instagram post or reel."
+          }
+        },
+        "response": {
+          "success": {
+            "status_code": 200,
+            "example": {
+              "url": [
+                {
+                  "url": "https://scontent-lga3-2.cdninstagram.com/o1/v/t2/...mp4?dl=1",
+                  "name": "MP4",
+                  "type": "mp4",
+                  "ext": "mp4"
+                }
+              ],
+              "meta": {
+                "title": "Koi mat jaana inke saath 😢 ...",
+                "source": "https://www.instagram.com/reel/DHDzIubgNzz/",
+                "shortcode": "DHDzIubgNzz",
+                "comments": [
+                  {
+                    "text": "Lagur ke hatha me agur",
+                    "username": "dhruv_kadiya_12"
+                  },
+                  {
+                    "text": "😂😂",
+                    "username": "sufiyan18___"
+                  }
+                ],
+                "comment_count": 8557,
+                "like_count": 451455,
+                "taken_at": 1741696887,
+                "username": "satishray_"
+              },
+              "thumb": "https://scontent-lga3-1.cdninstagram.com/v/t51.2885-15/...jpg",
+              "sd": null,
+              "hosting": "instagram.com",
+              "hd": null,
+              "timestamp": 1756031021
+            }
+          },
+          "errors": {
+            "400": "Missing required parameter 'url'.",
+            "404": "Post not found or private.",
+            "500": "Internal server error."
+          }
+        }
+      },
+      {
+        "path": "/bilibili",
+        "method": "GET",
+        "description": "Fetch video metadata and media links from a Bilibili video.",
+        "params": {
+          "url": {
+            "type": "string",
+            "required": true,
+            "example": "https://www.bilibili.com/video/BV1a2e4zvEGc",
+            "description": "Direct link to the Bilibili video."
+          }
+        },
+        "response": {
+          "success": {
+            "status_code": 200,
+            "example": {
+              "text": "让小我7岁的妹妹给我cos老婆是种什么体验",
+              "medias": [
+                {
+                  "media_type": "video",
+                  "resource_url": "https://upos-sz-estgcos.bilivideo.com/upgcxcode/77/99/...mp4",
+                  "preview_url": "https://i2.hdslb.com/bfs/archive/306dd95bac1679a30f29c550b567e2e2902665e7.jpg"
+                }
+              ]
+            }
+          },
+          "errors": {
+            "400": "Missing required parameter 'url'.",
+            "404": "Video not found or removed.",
+            "500": "Internal server error."
+          }
+        }
+      },
+      {
+        "path": "/pinterest",
+        "method": "GET",
+        "description": "Fetch media (images/videos) from a Pinterest pin.",
+        "params": {
+          "url": {
+            "type": "string",
+            "required": true,
+            "example": "https://pin.it/772GoTgMu",
+            "description": "Direct link to the Pinterest pin."
+          }
+        },
+        "response": {
+          "success": {
+            "status_code": 200,
+            "example": {
+              "text": "",
+              "medias": [
+                {
+                  "media_type": "video",
+                  "resource_url": "https://v1.pinimg.com/videos/iht/expMp4/7b/d3/de/7bd3de1098367d78697f2c7080a46a51_720w.mp4",
+                  "preview_url": "https://i.pinimg.com/originals/ac/ac/53/acac532e12ff57ce0a76f2e1f8dfa27c.jpg"
+                }
+              ]
+            }
+          },
+          "errors": {
+            "400": "Missing required parameter 'url'.",
+            "404": "Pin not found or media unavailable.",
+            "500": "Internal server error."
+          }
+        }
+      },
+      {
+        "path": "/tiktok",
+        "method": "GET",
+        "description": "Fetch TikTok video and audio metadata with direct download links.",
+        "params": {
+          "url": {
+            "type": "string",
+            "required": true,
+            "example": "https://vt.tiktok.com/ZSAAupTsR",
+            "description": "Direct link to a TikTok video."
+          }
+        },
+        "response": {
+          "success": {
+            "status_code": 200,
+            "example": {
+              "text": "#Samsung Galaxy a16#sokoto #Samsung #destacame ...",
+              "medias": [
+                {
+                  "media_type": "video",
+                  "resource_url": "https://v16.tokcdn.com/eec01fe70a043f4e9bb7d1ec1e04d19a/68783d00/7528036952742956294_original.mp4",
+                  "preview_url": "https://p16-sign-va.tiktokcdn.com/tos-maliva-p-0068/oYGxfkbngEt4UgIC3eG6ReuFHs8seA76FoACLh~tplv-tiktokx-360p.webp"
+                },
+                {
+                  "media_type": "audio",
+                  "resource_url": "https://v19-ies-music.tiktokcdn.com/77f982f2e3660eab041b2d9e15806bea/..."
+                }
+              ]
+            }
+          },
+          "errors": {
+            "400": "Missing required parameter 'url'.",
+            "404": "TikTok video not found or unavailable.",
+            "500": "Internal server error."
+          }
+        }
+      },
+      {
+        "path": "/insta",
+        "method": "GET",
+        "description": "Fetch Instagram reel or post media with direct download links.",
+        "params": {
+          "url": {
+            "type": "string",
+            "required": true,
+            "example": "https://www.instagram.com/reel/DHDzIubgNzz/?igsh=MzY1NG93ZzB5eHQ1",
+            "description": "Direct link to the Instagram reel or post."
+          }
+        },
+        "response": {
+          "success": {
+            "status_code": 200,
+            "example": {
+              "video": [
+                {
+                  "video": "https://scontent-yyz1-1.cdninstagram.com/o1/v/t16/f2/m86/AQPxNOWSFvbzUrZM...mp4",
+                  "thumbnail": "https://scontent-yyz1-1.cdninstagram.com/v/t51.2885-15/503311035_1425355205285075_n.jpg"
+                }
+              ]
+            }
+          },
+          "errors": {
+            "400": "Missing required parameter 'url'.",
+            "404": "Instagram media not found or unavailable.",
+            "500": "Internal server error."
+          }
+        }
+      },
+      {
+        "path": "/x-profile",
+        "method": "GET",
+        "description": "Fetch a Twitter/X profile details and recent tweets.",
+        "params": {
+          "username": {
+            "type": "string",
+            "required": true,
+            "example": "elonemusk",
+            "description": "The Twitter/X username without '@'."
+          },
+          "cursor": {
+            "type": "string",
+            "required": false,
+            "description": "Pagination cursor for fetching more tweets."
+          }
+        },
+        "response": {
+          "success": {
+            "status_code": 200,
+            "example": {
+              "profile": {
+                "name": "Elone Musk",
+                "username": "elonemusk",
+                "bio": "",
+                "avatar_url": "https://abs.twimg.com/sticky/default_profile_images/default_profile.png",
+                "banner_url": null,
+                "stats": {
+                  "tweets": 1,
+                  "following": 0,
+                  "followers": 33
+                }
+              },
+              "tweets": [
+                {
+                  "id": "833009778783825920",
+                  "text": "Soelone",
+                  "created_at": "Sat Feb 18 17:46:22 +0000 2017",
+                  "author": {
+                    "name": "Elone Musk",
+                    "username": "elonemusk",
+                    "avatar_url": "https://abs.twimg.com/sticky/default_profile_images/default_profile.png",
+                    "verified": false
+                  },
+                  "stats": {
+                    "replies": 4,
+                    "retweets": 0,
+                    "likes": 3,
+                    "views": null,
+                    "quotes": 0,
+                    "bookmarks": 1
+                  },
+                  "media": [],
+                  "quoted_tweet": null,
+                  "is_pinned": false,
+                  "is_retweet": false,
+                  "retweeter": null
+                }
+              ],
+              "cursor": "DAAHCgABGzHInnM___4LAAIAAAASODMzMDA5Nzc4NzgzODI1OTIwCAADAAAAAgAA"
+            }
+          },
+          "errors": {
+            "400": "Missing required parameter 'username'.",
+            "404": "User not found or profile is private.",
+            "500": "Internal server error."
+          }
+        }
+      },
+      {
+        "path": "/x-tweet",
+        "method": "GET",
+        "description": "Fetch details of a single Twitter/X tweet including media, stats, and author.",
+        "params": {
+          "url": {
+            "type": "string",
+            "required": true,
+            "example": "https://x.com/elonmusk/status/1959388361040318709",
+            "description": "Full URL of the tweet."
+          }
+        },
+        "response": {
+          "success": {
+            "status_code": 200,
+            "example": {
+              "id": "1959388361040318709",
+              "text": "https://t.co/tVD4zGDEOi",
+              "created_at": "Sat Aug 23 22:52:43 +0000 2025",
+              "author": {
+                "name": "Unknown",
+                "username": "unknown",
+                "avatar_url": "",
+                "verified": true
+              },
+              "stats": {
+                "replies": 3822,
+                "retweets": 8433,
+                "likes": 56285,
+                "quotes": 408,
+                "bookmarks": 2239
+              },
+              "lang": "zxx",
+              "conversation_id": "1959388361040318709",
+              "is_quote_status": false,
+              "possibly_sensitive": false,
+              "media": [
+                {
+                  "type": "video",
+                  "url": "https://video.twimg.com/amplify_video/1958931213781016576/vid/avc1/464x688/Rdyeho0Koe3KNCjt.mp4?tag=23",
+                  "poster": "https://pbs.twimg.com/amplify_video_thumb/1958931213781016576/img/H7dbrOipqsJ1AEiG.jpg",
+                  "display_url": "pic.x.com/tVD4zGDEOi",
+                  "duration": 6062,
+                  "bitrate": 5184000,
+                  "variants": [
+                    {
+                      "bitrate": 5184000,
+                      "content_type": "video/mp4",
+                      "url": "https://video.twimg.com/amplify_video/1958931213781016576/vid/avc1/464x688/Rdyeho0Koe3KNCjt.mp4?tag=23"
+                    }
+                  ],
+                  "id": "1958931213781016576"
+                }
+              ],
+              "quoted_tweet": null,
+              "note_tweet_text": null
+            }
+          },
+          "errors": {
+            "400": "Missing required parameter 'url'.",
+            "404": "Tweet not found or deleted.",
+            "500": "Internal server error."
+          }
+        }
+      },
+      {
+        "path": "/x-info",
+        "method": "GET",
+        "description": "Fetch basic profile information of a Twitter/X user.",
+        "params": {
+          "username": {
+            "type": "string",
+            "required": true,
+            "example": "elonemusk",
+            "description": "Twitter/X username without @"
+          }
+        },
+        "response": {
+          "success": {
+            "status_code": 200,
+            "example": {
+              "username": "elonemusk",
+              "name": "Elone Musk",
+              "description": "",
+              "followers_count": 33,
+              "following_count": 0,
+              "tweet_count": 1,
+              "location": "",
+              "profile_image_url": "https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png",
+              "profile_banner_url": "",
+              "created_at": "Sat Feb 18 17:45:02 +0000 2017",
+              "user_id": "833009444132941824"
+            }
+          },
+          "errors": {
+            "400": "Missing required parameter 'username'.",
+            "404": "User not found.",
+            "500": "Internal server error."
+          }
+        }
+      },
+      {
+        "path": "/x-media",
+        "method": "GET",
+        "description": "Extract downloadable media (videos, images, gifs) from a given Twitter/X post URL.",
+        "params": {
+          "url": {
+            "type": "string",
+            "required": true,
+            "example": "https://x.com/elonmusk/status/1959388361040318709",
+            "description": "Full URL of the tweet/post"
+          }
+        },
+        "response": {
+          "success": {
+            "status_code": 200,
+            "example": {
+              "title": "https://t.co/tVD4zGDEOi",
+              "media": [
+                {
+                  "type": "video",
+                  "thumbnail": "https://pbs.twimg.com/amplify_video_thumb/1958931213781016576/img/H7dbrOipqsJ1AEiG.jpg",
+                  "variants": [
+                    {
+                      "resolution": "464x688",
+                      "url": "https://video.twimg.com/amplify_video/1958931213781016576/vid/avc1/464x688/Rdyeho0Koe3KNCjt.mp4?tag=23"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "errors": {
+            "400": "Missing required parameter 'url'.",
+            "404": "No media found in this tweet.",
+            "500": "Internal server error."
+          }
+        }
+      }
+    ]
+  }
+}
